@@ -271,6 +271,30 @@ section{padding:100px 0 0}
 .empty-st div{font-size:46px;margin-bottom:6px}
 @media(max-width:900px){.mm{grid-template-columns:1fr}.mm-l{border-right:0;border-bottom:1px solid #ffffff22}.mm-l,.mm-r{padding:26px}.mm .row2{grid-template-columns:1fr}}
 
+/* business navigator */
+.mm-r{gap:12px!important}
+.nv-tabs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #ffffff26;border-radius:14px;overflow:hidden}
+.nv-tabs button{background:none;border:0;border-right:1px solid #ffffff1f;color:#c9c9bd;padding:11px 6px;font:600 13px var(--display);cursor:pointer;transition:background .2s,color .2s}
+.nv-tabs button:last-child{border:0}
+.nv-tabs button.on{background:var(--lime);color:#121210}
+.nv-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.nv-head .mono{color:#F1F0E8;text-transform:none;font-size:13px}
+.nv-live{display:inline-flex;align-items:center;gap:7px;font:600 10.5px var(--mono);text-transform:uppercase;color:#a9a99b}
+.nv-live i{width:8px;height:8px;border-radius:50%;background:#1FB34A;box-shadow:0 0 0 3px #1fb34a40}
+.nv-view{flex:1;display:flex;flex-direction:column;gap:12px}
+.nv-view[hidden]{display:none}
+.nv-map{position:relative;flex:1;min-height:360px;border-radius:16px;overflow:hidden;border:1.5px solid #ffffff2a;background:repeating-linear-gradient(45deg,#1d1f17 0 14px,#191b13 14px 28px)}
+.nv-map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:saturate(1.05)}
+.nv-fb{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;color:#8f8f82;font-size:14px}
+.nv-links{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.nv-links a{border:1px solid #ffffff2a;border-radius:10px;padding:9px 10px;font:600 12.5px var(--display);color:#F1F0E8;text-decoration:none;text-align:center;transition:all .2s}
+.nv-links a:hover{background:var(--lime);color:#121210;border-color:var(--lime)}
+.nv-full{grid-column:1/-1;border-top:1px solid #ffffff22;padding:22px 40px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:#0f100b}
+.nv-full b{display:block;font-size:22px;letter-spacing:-.02em;margin-top:4px;color:#F1F0E8}
+.nv-chips{display:flex;flex-wrap:wrap;gap:6px}
+.nv-chips span{font:600 10.5px var(--mono);text-transform:uppercase;letter-spacing:.04em;color:#d8d8cb;border:1px solid #ffffff2e;border-radius:99px;padding:5px 10px}
+@media(max-width:900px){.nv-full{grid-template-columns:1fr;padding:22px 26px}.nv-links{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.nv-tabs{grid-template-columns:1fr 1fr}.nv-tabs button:nth-child(2){border-right:0}.nv-tabs button:nth-child(-n+2){border-bottom:1px solid #ffffff1f}.nv-map{min-height:300px}}
 /* newsroom */
 .news{display:grid;grid-template-columns:1fr 1.2fr;gap:26px;align-items:stretch}
 .news-card{border:1.5px solid var(--ink);border-radius:28px;background:var(--card);padding:32px}
@@ -663,38 +687,70 @@ body.lab .cur{mix-blend-mode:screen}
       </article>
     </div>
   </section>
-  <!-- MARKETMAP -->
+  <!-- BUSINESS NAVIGATOR -->
   <section id="marketmap" style="padding-top:60px">
     <div class="sec-h rv">
       <h2><span class="num">PERSONAL BUILD 03 · THE BUSINESS NAVIGATOR</span>Any business, <span class="serif">any city,</span> a plan to launch there.</h2>
-      <p>Tell it a business and a location. It writes a market-entry brief, and Claude turns that into a step-by-step plan based on current market research for that place.</p>
+      <p>Type a business and a place. It pins the exact spot on Google Maps, shows who's already selling there, and hands Claude a brief to turn into a launch plan.</p>
     </div>
     <div class="mm rv">
       <div class="mm-l">
-        <span class="mono" style="color:var(--lime)">✦ Built-in Claude prompt</span>
-        <h3 style="margin-top:12px">What should a <em>cloud kitchen</em> do first in <em>Pune?</em></h3>
-        <p>Founders ask me this kind of thing on sales calls all the time. The Business Navigator turns the question into a sharp research brief and hands it to Claude.</p>
+        <span class="mono" style="color:var(--lime)">✦ Google Maps + Claude</span>
+        <h3 style="margin-top:12px" id="mmQ">What should a <em>cloud kitchen</em> do first in <em>Pune?</em></h3>
+        <p>Founders ask me this on sales calls all the time. So I built a navigator for it.</p>
         <form id="mmForm" autocomplete="off">
-          <label>Business<input id="mmBiz" placeholder="e.g. Specialty coffee roastery" required></label>
-          <label>Location<input id="mmLoc" placeholder="e.g. Indiranagar, Bengaluru" required></label>
+          <label>Business<input id="mmBiz" value="Cloud kitchen" placeholder="e.g. Specialty coffee roastery" required></label>
+          <label>Location<input id="mmLoc" value="Koregaon Park, Pune" placeholder="e.g. Indiranagar, Bengaluru" required></label>
           <div class="row2">
             <label>Stage<select id="mmStage"><option>Idea stage</option><option>Launching in 3 months</option><option>Already running elsewhere</option><option>Expanding to a new city</option></select></label>
-            <label>Budget<select id="mmBudget"><option>Bootstrapped (under ₹10L)</option><option>₹10L–₹50L</option><option>₹50L–₹2Cr</option><option>Funded (₹2Cr+)</option></select></label>
+            <label>Budget<select id="mmBudget"><option>Bootstrapped (under ₹10L)</option><option selected>₹10L–₹50L</option><option>₹50L–₹2Cr</option><option>Funded (₹2Cr+)</option></select></label>
           </div>
           <div class="ex"><span class="mono" style="color:#8f8f82;align-self:center">Try:</span>
-            <button type="button" data-b="EV charging station" data-l="Vijayawada">EV charging · Vijayawada</button>
-            <button type="button" data-b="AI upskilling bootcamp" data-l="Dubai, UAE">AI bootcamp · Dubai</button>
-            <button type="button" data-b="Cloud kitchen" data-l="Pune">Cloud kitchen · Pune</button>
+            <button type="button" data-b="Cloud kitchen" data-l="Koregaon Park, Pune">Cloud kitchen · Pune</button>
+            <button type="button" data-b="EV charging station" data-l="Benz Circle, Vijayawada">EV charging · Vijayawada</button>
+            <button type="button" data-b="AI upskilling bootcamp" data-l="Business Bay, Dubai">AI bootcamp · Dubai</button>
+            <button type="button" data-b="Specialty coffee roastery" data-l="Jubilee Hills, Hyderabad">Coffee · Hyderabad</button>
           </div>
-          <button class="btn lime" type="submit" style="justify-content:center;margin-top:6px">Map my market →</button>
+          <button class="btn lime" type="submit" style="justify-content:center;margin-top:6px">Navigate →</button>
         </form>
       </div>
-      <div class="mm-r" id="mmOut">
-        <div class="empty-st"><div>🗺️</div>Your launch map appears here.<br><span class="mono" style="font-size:11px">7 steps · 1 Claude prompt · 0 guesswork</span></div>
+      <div class="mm-r">
+        <div class="nv-tabs" id="nvTabs" role="tablist">
+          <button class="on" data-v="map">📍 Location</button>
+          <button data-v="comp">🏪 Who's there</button>
+          <button data-v="plan">🧭 Launch plan</button>
+          <button data-v="prompt">✦ Claude brief</button>
+        </div>
+        <div class="nv-head"><span class="mono" id="nvTitle">Cloud kitchen → Koregaon Park, Pune</span><span class="nv-live"><i></i>Google Maps</span></div>
+        <div class="nv-view" id="nvMap">
+          <div class="nv-map"><div class="nv-fb">Map loading… If it doesn't appear, use "Open in Google Maps" below.</div><iframe id="nvFrame" title="Google Map of the chosen location" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+          <div class="nv-links">
+            <a id="lkMaps" target="_blank" rel="noopener">Open in Google Maps ↗</a>
+            <a id="lkComp" target="_blank" rel="noopener">Competitors on Maps ↗</a>
+            <a id="lkNews" target="_blank" rel="noopener">Local market news ↗</a>
+            <a id="lkTrends" target="_blank" rel="noopener">Google Trends ↗</a>
+          </div>
+        </div>
+        <div class="nv-view" id="nvPlan" hidden><div class="steps" id="nvSteps"></div></div>
+        <div class="nv-view" id="nvPrompt" hidden>
+          <div class="prompt-box" id="mmPrompt" style="max-height:300px"></div>
+          <div class="mm-actions" style="margin-top:12px">
+            <a class="btn lime" id="mmOpen" target="_blank" rel="noopener">Run it in Claude ↗</a>
+            <button class="btn" id="mmCopy" type="button">Copy brief</button>
+          </div>
+        </div>
+      </div>
+      <div class="nv-full">
+        <div>
+          <span class="mono" style="color:var(--lime)">The full report engine</span>
+          <b>Go deeper than the map.</b>
+        </div>
+        <div class="nv-chips"><span>Buyer personas from Maps reviews</span><span>Micro-area breakdown</span><span>5-year outlook</span><span>MSP &amp; MRP pricing</span><span>Festival discount calendar</span><span>30-day growth plan</span></div>
+        <!-- The full Business Navigator report is a public claude.ai page. -->
+        <a class="btn lime" href="https://claude.ai/artifact/6kFo9uHSYrg6pRx2D54C7M" target="_blank" rel="noopener">Open the full Navigator ↗</a>
       </div>
     </div>
   </section>
-
   <!-- AI IN THE ECOSYSTEM -->
   <section id="ecosystem">
     <div class="sec-h rv">
@@ -978,38 +1034,52 @@ Give me an exact, step-by-step launch plan for this business in this location:
 9. Top 5 risks and how to reduce each.
 End with the 3 things I should do this week.`;
 }
+let nvMode = "map", nvState = null;
+const gq = (s) => encodeURIComponent(s);
+function nvShow(v) {
+  nvMode = v;
+  [...$("#nvTabs").children].forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  $("#nvMap").hidden = !(v === "map" || v === "comp"); $("#nvPlan").hidden = v !== "plan"; $("#nvPrompt").hidden = v !== "prompt";
+  if (nvState && (v === "map" || v === "comp")) {
+    const q = v === "map" ? nvState.l : `${nvState.b} near ${nvState.l}`;
+    const src = `https://maps.google.com/maps?q=${gq(q)}&z=${v === "map" ? 15 : 14}&output=embed`;
+    if ($("#nvFrame").getAttribute("src") !== src) $("#nvFrame").src = src;
+    $(".nv-live").lastChild.textContent = v === "map" ? "Google Maps · exact spot" : "Google Maps · nearby businesses";
+  }
+}
+$("#nvTabs").onclick = (e) => { const b = e.target.closest("button"); if (b) nvShow(b.dataset.v); };
 function mapMarket(e) {
   e && e.preventDefault();
   const b = $("#mmBiz").value.trim(), l = $("#mmLoc").value.trim();
   if (!b || !l) { toast("Add a business and a location first"); return; }
   const stage = $("#mmStage").value, budget = $("#mmBudget").value;
   const prompt = buildPrompt(b, l, stage, budget);
+  nvState = { b, l };
   const B = esc(b), L = esc(l);
+  $("#nvTitle").textContent = `${b} → ${l}`;
+  const an = /^[aeiou]/i.test(b) ? "an" : "a"; const place = l.split(",").pop().trim() || l;
+  $("#mmQ").innerHTML = `What should ${an} <em>${B.toLowerCase()}</em> do first in <em>${esc(place)}?</em>`;
+  $("#lkMaps").href = `https://www.google.com/maps/search/${gq(l)}`;
+  $("#lkComp").href = `https://www.google.com/maps/search/${gq(b + " near " + l)}`;
+  $("#lkNews").href = `https://www.google.com/search?tbm=nws&q=${gq(b + " market " + l)}`;
+  $("#lkTrends").href = `https://trends.google.com/trends/explore?q=${gq(b)}`;
   const steps = [
-    ["Size the demand", `How many people in ${L} look for ${B.toLowerCase()}, and is that growing?`],
-    ["Map the competition", `Who already sells ${B.toLowerCase()} in ${L}, at what price, and what gap is left?`],
+    ["Pin the spot", `See ${L} on the map: footfall streets, landmarks and access.`],
+    ["Map the competition", `Who already sells ${B.toLowerCase()} around ${L}, and what their reviews complain about.`],
+    ["Size the demand", `How many people near ${L} look for ${B.toLowerCase()}, and is that growing?`],
     ["Pick your first customer", `The 2–3 buyer personas in ${L} most likely to pay first.`],
     ["Clear the paperwork", `Registrations, permits and taxes for ${L}, in order.`],
-    ["Choose where to start", `The neighbourhoods or channels in ${L} to launch from.`],
     ["Set the price", `A local-currency price range that fits a ${esc(budget.split(" (")[0].toLowerCase())} budget.`],
     ["Run 30-60-90", `A week-by-week launch plan, ending with three things to do this week.`],
   ];
-  $("#mmOut").innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="mono">Launch map · ${B} → ${L}</span><span class="mono" style="color:var(--lime)">${esc(stage)}</span></div>
-    <div class="steps">${steps.map(([h, p], i) => `<div class="step" style="animation-delay:${i * 70}ms"><b>${String(i + 1).padStart(2, "0")}</b><div><h6>${h}</h6><p>${p}</p></div></div>`).join("")}</div>
-    <span class="mono">The Claude prompt behind it</span>
-    <div class="prompt-box" id="mmPrompt"></div>
-    <div class="mm-actions">
-      <a class="btn lime" id="mmOpen" target="_blank" rel="noopener">Run it in Claude ↗</a>
-      <button class="btn" id="mmCopy" type="button">Copy prompt</button>
-    </div>`;
+  $("#nvSteps").innerHTML = steps.map(([h, p], i) => `<div class="step" style="animation-delay:${i * 60}ms"><b>${String(i + 1).padStart(2, "0")}</b><div><h6>${h}</h6><p>${p}</p></div></div>`).join("");
   $("#mmPrompt").textContent = prompt;
   $("#mmOpen").href = "https://claude.ai/new?q=" + encodeURIComponent(prompt);
-  $("#mmCopy").onclick = async () => { try { await navigator.clipboard.writeText(prompt); toast("Prompt copied ✓"); } catch { toast("Select the prompt text to copy it"); } };
-  if (window.innerWidth < 900) $("#mmOut").scrollIntoView({ behavior: "smooth", block: "start" });
+  nvShow(e ? "map" : nvMode);
 }
+$("#mmCopy").onclick = async () => { try { await navigator.clipboard.writeText($("#mmPrompt").textContent); toast("Brief copied ✓"); } catch { toast("Select the brief text to copy it"); } };
 $("#mmForm").addEventListener("submit", mapMarket);
-document.querySelectorAll(".mm .ex button").forEach(b => b.onclick = () => { $("#mmBiz").value = b.dataset.b; $("#mmLoc").value = b.dataset.l; mapMarket(); });
+document.querySelectorAll(".mm .ex button").forEach(b => b.onclick = () => { $("#mmBiz").value = b.dataset.b; $("#mmLoc").value = b.dataset.l; nvMode = "map"; mapMarket(); });
 
 /* ---------- Wedding estimator ---------- */
 const nf = (n) => n.toLocaleString("en-IN");
@@ -1064,7 +1134,7 @@ addEventListener("mousemove", (e) => { cur.style.opacity = 1; cur.style.left = e
 document.addEventListener("mouseover", (e) => { const big = e.target.closest("a,button,.node,.tool"); cur.style.width = cur.style.height = big ? "54px" : "26px"; });
 
 /* ---------- boot ---------- */
-drawCities(); drawDesk(); drawCur(); drawPrograms(); selectOrg("c1"); drawWed();
+drawCities(); drawDesk(); drawCur(); drawPrograms(); selectOrg("c1"); drawWed(); mapMarket();
 setInterval(() => { drawCities(); drawDesk(); }, 30000);
 })();
 </script>
